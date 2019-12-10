@@ -1,13 +1,9 @@
 package main
 
-type bike struct {
-	isWorking bool
-}
-
 type dockingStation []bike
 
-func (dockingStation) releaseBike() bike {
-	return bike{}
+func (dockingStation) releaseBike() (bike, error) {
+	return bike{}, nil
 }
 
 func (ds *dockingStation) dockBike(b bike) {
