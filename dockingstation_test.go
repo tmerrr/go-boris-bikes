@@ -20,18 +20,25 @@ func TestNewDockingStation(t *testing.T) {
 
 func TestReleaseBike(t *testing.T) {
 	ds := newDockingStation(1)
+	assert.Equal(t, len(ds), 1, "Docking Station should have length of 1")
 
-	var b, err interface{} = ds.releaseBike()
+	b, err := ds.releaseBike()
+	assert.Equal(t, len(ds), 0, "Docking Station should have length of 0")
 	assert.NotNil(t, b, "Bike should not be Nil")
 	assert.Nil(t, err, "err should be Nil")
+	assert.True(t, b.isWorking, "Bike should be working")
+	assert.False(t, b.isDocked, "Bike should not be docked")
 
-	_, isBike := b.(bike)
+	ds = newDockingStation(1)
+	var b2, _ interface{} = ds.releaseBike()
+	_, isBike := b2.(bike)
 	assert.True(t, isBike, "Should be an instance of bike")
 
 	ds = newDockingStation(0)
-	var b2, err2 interface{} = ds.releaseBike()
-	assert.Nil(t, b2, "Bike should be Nil")
+	var _, err2 interface{} = ds.releaseBike()
 	assert.NotNil(t, err2, "err should not be Nil")
+	_, isErr := err2.(error)
+	assert.True(t, isErr, "Should be an error")
 }
 
 func TestDockBike(t *testing.T) {

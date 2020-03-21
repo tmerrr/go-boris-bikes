@@ -1,5 +1,9 @@
 package main
 
+import (
+	"errors"
+)
+
 type dockingStation []bike
 
 func newDockingStation(n int) dockingStation {
@@ -9,7 +13,7 @@ func newDockingStation(n int) dockingStation {
 	}
 
 	for i := 0; i < n; i++ {
-		b := bike{true}
+		b := newBike()
 		ds = append(ds, b)
 	}
 
@@ -17,13 +21,24 @@ func newDockingStation(n int) dockingStation {
 }
 
 func (ds *dockingStation) releaseBike() (bike, error) {
-	if len(ds) == 0 {
-		// Can't return struct as nil.
-		// The zero value of an interface is nil
-		// Need to rewrite the Bike as an interface
-		return nil, error
+	var bikeFound bool
+	var index int
+	var bk bike
+	for i, b := range *ds {
+		if b.isWorking == true {
+			bikeFound = true
+			index = i
+			bk = b
+			break
+		}
 	}
-	return bike{}, nil
+	if bikeFound == true {
+		(*ds) = append((*ds)[:index], (*ds)[index+1:]...)
+		bk.release()
+		return bk, nil
+	}
+
+	return bike{}, errors.New("No Working Bikes Available")
 }
 
 func (ds *dockingStation) dockBike(b bike) {
