@@ -21,26 +21,18 @@ func newDockingStation(n int) dockingStation {
 }
 
 func (ds *dockingStation) releaseBike() (bike, error) {
-	var bikeFound bool
-	var index int
-	var bk bike
 	for i, b := range *ds {
 		if b.isWorking == true {
-			bikeFound = true
-			index = i
-			bk = b
-			break
+			(*ds) = append((*ds)[:i], (*ds)[i+1:]...)
+			b.release()
+			return b, nil
 		}
 	}
-	if bikeFound == true {
-		(*ds) = append((*ds)[:index], (*ds)[index+1:]...)
-		bk.release()
-		return bk, nil
-	}
-
+	// if no bikes found:
 	return bike{}, errors.New("No Working Bikes Available")
 }
 
-func (ds *dockingStation) dockBike(b bike) {
-	(*ds) = append((*ds), b)
+func (ds *dockingStation) dockBike(b *bike) {
+	b.dock()
+	(*ds) = append((*ds), *b)
 }
