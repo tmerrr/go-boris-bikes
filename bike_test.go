@@ -22,16 +22,16 @@ func TestNewBike(t *testing.T) {
 	assert.True(t, b.isDocked, "Bike should be docked")
 }
 
-func TestRelease(t *testing.T) {
-	b := newBike()
-	assert.True(t, b.isDocked, "Bike should be docked")
-	b.release()
-	assert.False(t, b.isDocked, "Bike should now be released (not docked)")
+func TestSetIsWorking(t *testing.T) {
+	b := bike{}
+	assert.False(t, b.isWorking, "expected isWorking to be false")
+	b.SetIsWorking(true)
+	assert.True(t, b.isWorking, "expected isWorking to be true")
 }
 
-func TestDock(t *testing.T) {
+func TestSetIsDocked(t *testing.T) {
 	b := bike{}
-	assert.False(t, b.isDocked, "Bike should not be docked")
-	b.dock()
-	assert.True(t, b.isDocked, "Bike should now be docked")
+	assert.False(t, b.isDocked, "expected isDocked to be false")
+	b.SetIsDocked(true)
+	assert.True(t, b.isDocked, "expected isDocked to be true")
 }

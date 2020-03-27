@@ -5,16 +5,33 @@ import (
 	"os"
 )
 
+func checkBike(b bike) {
+	fmt.Println("Is the bike working:", b.isWorking)
+}
+
+func checkBikesInDockingStation(ds dockingStation) {
+	fmt.Printf("Docking Station has %v Bikes\n", len(ds))
+}
+
 func main() {
-	ds := newDockingStation(10)
-	ds.releaseBike()
+	ds := newDockingStation(1)
+	checkBikesInDockingStation(ds)
+
 	b, err := ds.releaseBike()
 	if err != nil {
 		fmt.Println("Error releasing bike:", err)
 		os.Exit(1)
 	}
-	fmt.Println("Is the bike working:", b.isWorking)
-	fmt.Printf("Docking station has %v bikes\n", len(ds))
-	ds.dockBike(&b)
-	fmt.Printf("Docking station has %v bikes\n", len(ds))
+	checkBikesInDockingStation(ds)
+
+	checkBike(*b)
+	b.SetIsWorking(false)
+	checkBike(*b)
+
+	ds.dockBike(b)
+	b, err = ds.releaseBike()
+	if err != nil {
+		fmt.Println("Error releasing bike:", err)
+		os.Exit(1)
+	}
 }

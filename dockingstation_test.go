@@ -22,26 +22,29 @@ func TestReleaseBike(t *testing.T) {
 	ds := newDockingStation(1)
 	assert.Equal(t, len(ds), 1, "Docking Station should have length of 1")
 	// asserts can successfully release a bike
-	b, err := ds.releaseBike()
+	bp, err := ds.releaseBike()
 	assert.Equal(t, len(ds), 0, "Docking Station should have length of 0")
-	assert.NotNil(t, b, "Bike should not be Nil")
+	assert.NotNil(t, bp, "Bike should not be Nil")
 	assert.Nil(t, err, "err should be Nil")
-	assert.True(t, b.isWorking, "Bike should be working")
-	assert.False(t, b.isDocked, "Bike should not be docked")
+	assert.True(t, bp.isWorking, "Bike should be working")
+	assert.False(t, bp.isDocked, "Bike should not be docked")
+	// asserts bp is a pointer to a bike
+	var b interface{} = *bp
+	_, isBike := b.(bike)
+	assert.True(t, isBike, "Should be an instance of bike")
 	// asserts that cannot release a bike if only broken available
 	ds = append(ds, bike{false, true})
-	b, err = ds.releaseBike()
-	assert.NotNil(t, b, "Error should exist")
-
-	ds = newDockingStation(1)
-	var b2, _ interface{} = ds.releaseBike()
-	_, isBike := b2.(bike)
-	assert.True(t, isBike, "Should be an instance of bike")
-
+	bp, err = ds.releaseBike()
+	assert.Nil(t, bp, "Bike should be Nil")
+	assert.NotNil(t, err, "Error should exist")
+	_, isErr := err.(error)
+	assert.True(t, isErr, "Should be an instance of error")
+	//asserts error is returned when no bikes in docking station
 	ds = newDockingStation(0)
-	var _, err2 interface{} = ds.releaseBike()
-	assert.NotNil(t, err2, "err should not be Nil")
-	_, isErr := err2.(error)
+	bp, err = ds.releaseBike()
+	assert.Nil(t, bp, "Bike should be Nil")
+	assert.NotNil(t, err, "err should not be Nil")
+	_, isErr = err.(error)
 	assert.True(t, isErr, "Should be an error")
 }
 

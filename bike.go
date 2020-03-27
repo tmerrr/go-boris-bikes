@@ -9,10 +9,10 @@ func newBike() bike {
 	return bike{true, true}
 }
 
-func (b *bike) release() {
-	b.isDocked = false
+func (b *bike) SetIsWorking(val bool) {
+	b.isWorking = val
 }
 
-func (b *bike) dock() {
-	b.isDocked = true
+func (b *bike) SetIsDocked(val bool) {
+	b.isDocked = val
 }

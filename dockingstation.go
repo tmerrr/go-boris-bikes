@@ -20,19 +20,19 @@ func newDockingStation(n int) dockingStation {
 	return ds
 }
 
-func (ds *dockingStation) releaseBike() (bike, error) {
+func (ds *dockingStation) releaseBike() (*bike, error) {
 	for i, b := range *ds {
 		if b.isWorking == true {
 			(*ds) = append((*ds)[:i], (*ds)[i+1:]...)
-			b.release()
-			return b, nil
+			b.SetIsDocked(false)
+			return &b, nil
 		}
 	}
 	// if no bikes found:
-	return bike{}, errors.New("No Working Bikes Available")
+	return nil, errors.New("No Working Bikes Available")
 }
 
 func (ds *dockingStation) dockBike(b *bike) {
-	b.dock()
+	b.SetIsDocked(true)
 	(*ds) = append((*ds), *b)
 }
