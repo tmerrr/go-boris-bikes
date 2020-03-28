@@ -4,26 +4,29 @@ import (
 	"errors"
 )
 
-type dockingStation []bike
+type dockingStation struct {
+	bikes    []bike
+	capacity int
+}
 
-func newDockingStation(n int) dockingStation {
-	ds := dockingStation{}
-	if n < 1 {
-		return ds
+func newDockingStation(bikeCount int, capacity int) dockingStation {
+	bikes := []bike{}
+	if bikeCount < 1 {
+		return dockingStation{bikes, capacity}
 	}
 
-	for i := 0; i < n; i++ {
+	for i := 0; i < bikeCount; i++ {
 		b := newBike()
-		ds = append(ds, b)
+		bikes = append(bikes, b)
 	}
 
-	return ds
+	return dockingStation{bikes, capacity}
 }
 
 func (ds *dockingStation) releaseBike() (*bike, error) {
-	for i, b := range *ds {
+	for i, b := range ds.bikes {
 		if b.isWorking == true {
-			(*ds) = append((*ds)[:i], (*ds)[i+1:]...)
+			(ds.bikes) = append((ds.bikes)[:i], (ds.bikes)[i+1:]...)
 			b.SetIsDocked(false)
 			return &b, nil
 		}
@@ -32,7 +35,11 @@ func (ds *dockingStation) releaseBike() (*bike, error) {
 	return nil, errors.New("No Working Bikes Available")
 }
 
-func (ds *dockingStation) dockBike(b *bike) {
+func (ds *dockingStation) dockBike(b *bike) error {
+	if len(ds.bikes) >= ds.capacity {
+		return errors.New("Unable to dock Bike. Docking Station has reached maximum capacity")
+	}
 	b.SetIsDocked(true)
-	(*ds) = append((*ds), *b)
+	ds.bikes = append(ds.bikes, *b)
+	return nil
 }

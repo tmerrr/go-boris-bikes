@@ -10,11 +10,11 @@ func checkBike(b bike) {
 }
 
 func checkBikesInDockingStation(ds dockingStation) {
-	fmt.Printf("Docking Station has %v Bikes\n", len(ds))
+	fmt.Printf("Docking Station has %v Bikes\n", len(ds.bikes))
 }
 
 func main() {
-	ds := newDockingStation(1)
+	ds := newDockingStation(1, 5)
 	checkBikesInDockingStation(ds)
 
 	b, err := ds.releaseBike()
