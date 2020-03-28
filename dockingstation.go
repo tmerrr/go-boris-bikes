@@ -9,10 +9,14 @@ type dockingStation struct {
 	capacity int
 }
 
-func newDockingStation(bikeCount int, capacity int) dockingStation {
+func newDockingStation(bikeCount int, capacity int) (*dockingStation, error) {
+	if bikeCount > capacity {
+		return nil, errors.New("Bike count cannot exceed capacity")
+	}
+
 	bikes := []bike{}
 	if bikeCount < 1 {
-		return dockingStation{bikes, capacity}
+		return &dockingStation{bikes, capacity}, nil
 	}
 
 	for i := 0; i < bikeCount; i++ {
@@ -20,7 +24,7 @@ func newDockingStation(bikeCount int, capacity int) dockingStation {
 		bikes = append(bikes, b)
 	}
 
-	return dockingStation{bikes, capacity}
+	return &dockingStation{bikes, capacity}, nil
 }
 
 func (ds *dockingStation) releaseBike() (*bike, error) {
