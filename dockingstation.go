@@ -13,15 +13,13 @@ func newDockingStation(bikeCount int, capacity int) (*dockingStation, error) {
 	if bikeCount > capacity {
 		return nil, errors.New("Bike count cannot exceed capacity")
 	}
-
-	bikes := []bike{}
-	if bikeCount < 1 {
-		return &dockingStation{bikes, capacity}, nil
+	if bikeCount < 0 {
+		return nil, errors.New("Bike count cannot be negative value")
 	}
 
+	bikes := []bike{}
 	for i := 0; i < bikeCount; i++ {
-		b := newBike()
-		bikes = append(bikes, b)
+		bikes = append(bikes, newBike())
 	}
 
 	return &dockingStation{bikes, capacity}, nil
@@ -30,7 +28,7 @@ func newDockingStation(bikeCount int, capacity int) (*dockingStation, error) {
 func (ds *dockingStation) releaseBike() (*bike, error) {
 	for i, b := range ds.bikes {
 		if b.isWorking == true {
-			(ds.bikes) = append((ds.bikes)[:i], (ds.bikes)[i+1:]...)
+			ds.bikes = append(ds.bikes[:i], ds.bikes[i+1:]...)
 			b.SetIsDocked(false)
 			return &b, nil
 		}

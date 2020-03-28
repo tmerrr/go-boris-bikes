@@ -13,14 +13,21 @@ func checkBikesInDockingStation(ds *dockingStation) {
 	fmt.Printf("Docking Station has %v Bikes\n", len(ds.bikes))
 }
 
+func throwError(msg string, err error) {
+	fmt.Println(msg, err)
+	os.Exit(1)
+}
+
 func main() {
-	ds, _ := newDockingStation(1, 5)
+	ds, err1 := newDockingStation(1, 5)
+	if err1 != nil {
+		throwError("Error creating new docking station:", err1)
+	}
 	checkBikesInDockingStation(ds)
 
-	b, err := ds.releaseBike()
-	if err != nil {
-		fmt.Println("Error releasing bike:", err)
-		os.Exit(1)
+	b, err2 := ds.releaseBike()
+	if err2 != nil {
+		throwError("Error releasing bike:", err2)
 	}
 	checkBikesInDockingStation(ds)
 
@@ -29,9 +36,8 @@ func main() {
 	checkBike(*b)
 
 	ds.dockBike(b)
-	b, err = ds.releaseBike()
-	if err != nil {
-		fmt.Println("Error releasing bike:", err)
-		os.Exit(1)
+	b, err2 = ds.releaseBike()
+	if err2 != nil {
+		throwError("Error releasing bike:", err2)
 	}
 }

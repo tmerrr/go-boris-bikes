@@ -9,10 +9,10 @@ func newBike() bike {
 	return bike{true, true}
 }
 
-func (b *bike) SetIsWorking(val bool) {
-	b.isWorking = val
+func (b *bike) SetIsWorking(bln bool) {
+	b.isWorking = bln
 }
 
-func (b *bike) SetIsDocked(val bool) {
-	b.isDocked = val
+func (b *bike) SetIsDocked(bln bool) {
+	b.isDocked = bln
 }
